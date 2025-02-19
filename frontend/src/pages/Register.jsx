@@ -1,7 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
+
 const Register = () => {
+  const [selectedDay, setSelectedDay] = useState('');
+
+  const days = Array.from({ length: 31 }, (_, i) => i + 1);
+
   return (
     <div className='flex flex-col w-[100%]'>
           <div className='flex flex-row '>
@@ -16,8 +21,11 @@ const Register = () => {
                
     
               </div>
+              <div className="bg-black w-1 h-[4rem] ml-[1.85rem]">
+
+</div>
     
-              <div className="flex flex-row  items-center mt-16 ml-3">
+              <div className="flex flex-row  items-center ml-3">
                   <div className='w-10 h-10 rounded-full flex items-center justify-center bg-white text-black mr-2'>
                     <p>2</p>
                   </div>
@@ -25,8 +33,11 @@ const Register = () => {
               
     
               </div>
+              <div className="bg-black w-1 h-[4rem] ml-[1.85rem]">
+
+</div>
     
-              <div className="flex flex-row items-center mt-16 ml-3">
+              <div className="flex flex-row items-center ml-3">
                   <div className='w-10 h-10 rounded-full flex items-center justify-center bg-black text-white mr-2'>
                     <p>3</p>
                   </div>
@@ -68,6 +79,8 @@ const Register = () => {
                     <input type='text' className='font-normal text-center w-[60%] px-4 py-2 mt-2 border rounded-md border-gray-800' placeholder='ヤマグチタロウ' required />
 
                   </div>
+                 
+                  {/* TEST DATE OF BIRTH */}
                   <div className='flex flex-col font-normal '>
                     <div className='flex w-[50%]'>
                     <p className='font-medium text-[16px]'>生年月日（数字８桁）</p>
@@ -76,9 +89,16 @@ const Register = () => {
                     <p className=''>任意</p>
                     </div>
                     </div>
-                    <input type='text' className='font-normal text-center w-[60%] px-4 py-2 mt-2 border rounded-md border-gray-800' placeholder='19800101' required />
+                    <div className='flex flex-row gap-5'>
+                    <input type='number'  id="day" name="day" min="1" max="31" className='font-normal text-center w-[10%] px-4 py-2 mt-2 border rounded-md border-gray-800' placeholder='01' required />
+                   
+                    <input type='number'  id="month" name="month" min="1" max="12" className='font-normal text-center w-[10%] px-4 py-2 mt-2 border rounded-md border-gray-800' placeholder='12' required />
+                    <input type='number'  id="year" name="year" min="1901" max="2024" className='font-normal text-center w-[10%] px-4 py-2 mt-2 border rounded-md border-gray-800' placeholder='1980' required />
 
+                    </div>
                   </div>
+                   
+                  
                   <div className='flex flex-col font-normal '>
                     <div className='flex w-[50%]'>
                     <p className='font-medium text-[16px]'>郵便番号（ハイフンなし）</p>

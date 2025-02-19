@@ -1,142 +1,104 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
-import { useNavbarFooterContext } from '../context/NavbarFooterContext';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import { useContext, useState } from 'react'
+import { assets } from '../assets/assets';
+import { data, useNavigate } from 'react-router-dom';
+import { AppContent } from '../context/AppContext';
+import axios from 'axios'
+import {toast} from 'react-toastify'
+
 
 const Login = () => {
-
-
-  const [currentState, setCurrentState] = useState('Sign Up');
-  const onSubmitHandler = async (event) => {
-    event.preventDefault();
-
-  }
   
-  return (
-    
-    <div className='sm:px-[5vw] md:px-[0vw] lg:px-[0vw]'>
-      
-      <div className='flex relative flex-col'>
-        <div className='flex flex-row h-[80vh]'>
+  
+  const navigate = useNavigate();
+  const {backendUrl, setIsLoggedin, getUserData } = useContext(AppContent);
 
-          {/* Step Sign Up */}
-          <div className='w-[25%] bg-main1 flex-row'>
-            <div className="flex flex-row items-center mt-8 ml-3">
-              <div className='w-10 h-10 rounded-full flex items-center justify-center bg-black text-white text-lg mr-2'>
-                <p>1</p>
-              </div>
-              <p className=''>メールアドレス登録</p>
-              {/* <div className="ml-4 w-1 h-16 bg-black"></div> */}
+  const [state, setState] = useState('Sign Up');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-            </div>
-            <div className="bg-black w-2 h-[4rem] ml-7">
-                  
-            </div>
+  const onSubmitHandler = async (e) => {
+     try {
+        e.preventDefault();
+        axios.defaults.withCredentials = true
 
-            <div className="flex flex-row  items-center ml-3">
-              <div className='w-10 h-10 rounded-full flex items-center justify-center bg-white text-black mr-2'>
-                <p>2</p>
-              </div>
-              <p className=''>認証コード入力</p>
-              {/* <div className="ml-4 w-1 h-16 bg-black"></div> */}
+        if(state === 'Sign Up'){
+          const {data} = await axios.post(backendUrl + '/api/auth/register', {name, email, password})
 
-            </div>
+          if(data.success){
+            setIsLoggedin(true)
+            getUserData()
+            navigate('/')
+          }
+          else{
+            toast.error(data.message)
+        }
+        }else{
+          const {data} = await axios.post(backendUrl + '/api/auth/login', {email, password})
 
-            <div className="flex flex-row items-center mt-16 ml-3">
-              <div className='w-10 h-10 rounded-full flex items-center justify-center bg-white text-black mr-2'>
-                <p>3</p>
-              </div>
-              <p className=''>会員情報登録</p>
-              {/* <div className="absolute top-1/2 -mt-10 w-2 h-20 bg-black"></div> */}
-            </div>
-
-
-
-          </div>
-          {/* Form Sign Up */}
-          <div className='flex flex-col w-[75%] bg '>
-            <div className='font-semibold text-xl mt-8 ml-6'>
-              <h2 >メールアドレス登録</h2>
-            </div>
-
-            <div className='w-[100%] h-[100%] mt-24'>
-
-              {/* <form onSubmit= {onSubmitHandler} className='flex flex-col items-center sm:max-w-96 m-auto mt-14 gap-4 text-gray-800 bg-white'>
-                    <div className='inline-flex items-center gap-2 mb-2 mt-10'>
-                   <p className='prata-regular text-3xl'>{currentState}</p>
-                    <hr className='border-none h-[1.5px] w-8 bg-gray-800'/>
-                    </div>
-                    {currentState === 'Login' ? '' : <input type='text' className='w-full px-3 py-2 border border-gray-800' placeholder='Name' required/>}
-
-                  <input type='email' className='w-full px-4 py-2 border border-gray-800' placeholder='Email' required/>
-                   <input type='password' className='w-full px-3 py-2 border border-gray-800' placeholder='Password' required />
-                    <div className='w-full flex justify-between text-sm mt-[-8px]'>
-          <p className='cursor-pointer'>Forgot your password</p>
-          {
-            currentState === 'Login'
-            ? <p onClick={()=>setCurrentState('Sign Up')} className='cursor-pointer'>Create account</p>
-            : <p onClick={()=>setCurrentState('Login')} className='cursor-pointer'>Login Here</p>
+          if(data.success){
+            setIsLoggedin(true)
+            getUserData()
+            navigate('/user')
 
           }
-
-       </div>
-       <button className='bg-black text-white font-light px-8 py-2 mt-4'>{currentState === 'Login' ? 'Sign In' : 'Sign Up'}</button>
+          else{
+            toast.error(data.message)
+        }
+        }
+     } catch (error) {
+      toast.error(data.message)
         
+     }
+  }
 
-                  </form> */}
-
-              <form className='flex flex-col gap-4 w-[100%] '>
-                <div className='flex flex-row justify-start'>
-
-                  <div className='font-normal text-center w-[35%]'>
-                    <p>メールアドレス登録</p>
-                  </div>
-
-                  <div className='flex flex-col gap-4 w-[100%] ml-10'>
-                    <input type='email' className='font-normal text-center w-[80%] px-4 py-2 border rounded-md border-gray-800' placeholder='example@icloud.com' required />
-                    <input type='email' className='w-[80%] text-center  px-4 py-2 border rounded-md border-gray-800' placeholder='確認のため再度ご入力ください' required />
-
-                  </div>
-                </div>
-
-                <div className='font-medium text-xs mt-4 ml-6'>
-                  <p>
-                    ※メールの受信拒否設定により、お手元に認証コードメールが届かないことがあります。
-                  </p>
-                  <p>
-                    「<Link className='text-blue-600'> ＠メールアドレス</Link>」ドメインからのメールが受信できるよう設定をお願いいたします。
-                  </p>
-                </div>
+  return (
+   
+    <div className='flex justify-center items-center min-h-screen px-6 sm:px-0'>
+  
+      <div className='bg-main1 p-10 rounded-lg shadow-lg w-full sm:w-96
+       text-blue-600 text-sm '>
+        <h2 className='text-3xl font-semibold text-black text-center mb-3'  >
+          {state === 'Sign Up' ? 'Create Account' : 'Login to account!'}</h2>
+        <p className='text-center text-sm mb-6'>
+          {state === 'Sign Up' ? 'Create your account' : 'Login to account!'}</p>
 
 
-                <div className='flex justify-center items-center'>
-
-                <button className='bg-black text-white  w-80 rounded-lg font-light px-6 py-4 mt-4'>メールで認証コードを送信する</button>
-                </div>
-
-
-              </form>
+        <form onSubmit={onSubmitHandler}>
+          {state === 'Sign Up' && (
+            <div className='mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-main2' >
+              <img src={assets.person_icon} />
+              <input onChange={e => setName(e.target.value)} value={name} className='bg-transparent outline-none text-white ' type='text' placeholder='Full name' required />
 
             </div>
-
-
+          )}
+            
+          <div className='mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-main2' >
+            <img src={assets.mail_icon} />
+            <input onChange={e => setEmail(e.target.value)} value={email} className='bg-transparent outline-none text-white ' type='email' placeholder='Email' required />
 
           </div>
+          <div className='mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-main2' >
+            <img src={assets.lock_icon} />
+            <input onChange={e => setPassword(e.target.value)} value={password} className='bg-transparent outline-none text-white' type='password' placeholder='Password' required />
 
-        </div>
-        <div className='flex flex-row justify-around items-center bg-main2 h-[20vh] text-white text-lg'>
-          <Link to={onclick = {}}>プライバシーポリシー</Link>
-          <Link to={onclick = {}}>ヘルプ</Link>
-          <Link to={onclick = {}}>利用規約</Link>
-          <Link to={onclick = {}}>公式SNS</Link>
+          </div>
+          <p onClick={()=>navigate('/reset-password')} className='mb-4 text-black cursor-pointer'>Forgot Password?</p>
+          <button className='w-full rounded-full py-2.5 bg-black
+           to-indigo-900 text-white font-medium' >{state}</button>
+        </form>
 
-        </div>
+        {state === 'Sign Up' ? (<p className='text-gray-500 text-center text-sx mt-4'>Already have an account? {' '}
+          <span onClick={()=>setState('Login')} className='text-blue-400 cursor-pointer underline'>Login here</span>
+        </p>) : (<p className='text-gray-400 text-center text-sx mt-4'> Don't have an account? {' '}
+          <span onClick={()=>setState('Sign Up')} className='text-blue-400 cursor-pointer underline'>Sign up</span>
+        </p>)} 
+
+
+
       </div>
-     
-
-      
     </div>
+
   )
 }
 

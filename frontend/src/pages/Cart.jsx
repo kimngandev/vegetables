@@ -3,8 +3,11 @@ import { ShopConText } from '../context/ShopContext';
 import Title from '../components/Title';
 import { assets } from '../assets/assets';
 import CartTotal from '../components/CartTotal';
-
+import { useNavbarFooterContext } from '../context/NavbarFooterContext';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 const Cart = () => {
+  const { showNavbarFooter } = useNavbarFooterContext();
 
   const {products, currency, cartItems, updateQuantity, navigate} = useContext(ShopConText);
   
@@ -28,10 +31,11 @@ const Cart = () => {
   },[cartItems])
 
   return (
-    <div className='border-t pt-14'>
-      <div className='text-2xl  mb-3'>
+    <div className='border-t-4 sm:px-[0vw] md:px-[0vw] lg:px-[0vw] m-auto'>
+       {showNavbarFooter && <Navbar/>}
+     <div className='mt-[8em]'>
+     <div className='text-2xl mt-16 mb-3'>
           <Title text1={'YOUR'} text2={'CART'} />
-
       </div>
 
       <div>
@@ -47,14 +51,14 @@ const Cart = () => {
                           <p className='text-xs sm:text-lg font-medium'>{productData.name}</p>
                           <div className='flex items-center gap-5 mt-2'>
                               <p>{currency}{productData.price}</p>
-                              <p className='px-2 sm:px-3 sm:py-1 border bg-slate-50'>{item.size}</p>
+                              {/* <p className='px-2 sm:px-3 sm:py-1 border bg-slate-50'>{item.size}</p> */}
                           </div>
                         </div>
 
                     </div>
-                    <input onChange={(e)=> e.target.value === '' || e.target.value === '0' ? null : updateQuantity(item._id,item.size,Number(e.target.value))} className='border max-w-10 sm:max-w-20 px-1 sm:py-2 py-1' type="number" min={1} defaultValue={item.quantity} />
-                    <img onClick={()=> updateQuantity(item._id,item.size,0)} className='w-4 mr-4 sm:w-5 cursor-pointer' src={assets.bin_icon} alt='' />
- 
+                    <input onChange={(e)=> e.target.value === '' || e.target.value === '0' ? null : updateQuantity(item._id,Number(e.target.value))} className='border max-w-10 sm:max-w-20 px-1 sm:py-2 py-1' type="number" min={1} defaultValue={item.quantity} />
+                    <img onClick={()=> updateQuantity(item._id,0)} className='w-4 mr-4 sm:w-5 cursor-pointer' src={assets.bin_icon} alt='' />
+  
 
                 </div>
 
@@ -75,8 +79,9 @@ const Cart = () => {
                 </div>
             </div>
 
-        </div>
-
+       </div>
+     </div>
+        {showNavbarFooter && <Footer/>}
     </div>
   )
 }

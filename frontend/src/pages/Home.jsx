@@ -7,20 +7,32 @@ import NewsletterBox from '../components/NewsletterBox'
 import { useNavbarFooterContext } from '../context/NavbarFooterContext';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import Slides from '../components/Slides'
+import { assets } from '../assets/assets'
 const Home = () => {
   const { showNavbarFooter } = useNavbarFooterContext();
 
   return (
-    <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
+    <div className='sm:px-[0vw] md:px-[0vw] lg:px-[0vw] m-auto'>
       {showNavbarFooter && <Navbar/>}
-      
-      <Hero />
-      <LatestCollection/>
-      <BestSeller/>
-      <OurPolicy/>
-      <NewsletterBox/>
-      {showNavbarFooter && <Footer/>}
+       
+      {/* Slide */}
+      <Slides/>
+      {/* Product */}
+      <div className='max-w-[1400px]flex flex-col items-center justify-between'>
+      <div className='mx-10 h-[500px]'>
+        <h2 className='text-3xl text-[color:#333333]' >採れたて野菜</h2>
+        <hr className='mt-3 border-t-4 border-[color:#796E48]' />
+        <div className='flex w-full justify-between items-center my-10'>
+            <img src={assets.sweet_potato} />
+            <img src={assets.cabbage}/>
+            <img src={assets.tomato}/>
 
+        </div>
+      </div>
+      </div>
+      {showNavbarFooter && <Footer/>}
+ 
       </div>
   )
 }

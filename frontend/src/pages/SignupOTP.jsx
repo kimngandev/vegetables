@@ -1,8 +1,51 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Link } from 'react-router-dom'
+import {OtpProvider} from '../context/OtpContext'
+import { useRef } from 'react'
+import { ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
+
 const SignupOTP = () => {
+
+  const verifyOtp = async (otp) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/otp/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: otpState.email, otp })
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok) throw new Error(data.message);
+  
+      toast.success("OTP verified successfully! Redirecting...");
+      setTimeout(() => navigate("/nextPage"), 2000);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+  
+
+  const [values, setValues] = useState(["", "", "", ""]);
+  const inputRefs = useRef([]);
+
+  const handleChange = (index, e) => {
+    const newValue = e.target.value;
+    if (/^\d?$/.test(newValue)) {
+      const newValues = [...values];
+      newValues[index] = newValue;
+      setValues(newValues);
+
+      if (newValue && index < inputRefs.current.length - 1) {
+        inputRefs.current[index + 1].focus();
+      }
+    }
+  };
+ 
     return (
         <div className='flex flex-col w-[100%] '>
+          {/* User Interface */}
           <div className='flex flex-row w-[100%] h-[80vh]'>
            
            {/* Step Sign Up */}
@@ -15,8 +58,11 @@ const SignupOTP = () => {
                
     
               </div>
+              <div className="bg-black w-1 h-[4rem] ml-[1.85rem]">
+
+</div>
     
-              <div className="flex flex-row  items-center mt-16 ml-3">
+              <div className="flex flex-row  items-center ml-3">
                   <div className='w-10 h-10 rounded-full flex items-center justify-center bg-black text-white mr-2'>
                     <p>2</p>
                   </div>
@@ -24,8 +70,11 @@ const SignupOTP = () => {
               
     
               </div>
+              <div className="bg-black w-1 h-[4rem] ml-[1.85rem]">
+
+</div>
     
-              <div className="flex flex-row items-center mt-16 ml-3">
+              <div className="flex flex-row items-center ml-3">
                   <div className='w-10 h-10 rounded-full flex items-center justify-center bg-white text-black mr-2'>
                     <p>3</p>
                   </div>
@@ -51,10 +100,19 @@ const SignupOTP = () => {
                             </div>
     
                             <div className='flex flex-row gap-6 w-[100%] mt-6 items-center justify-center '>
-                                <input type='text' className='font-normal text-center w-12 px-1 py-4 border rounded-md border-gray-800' required/>
-                                <input type='text' className='font-normal text-center w-12 px-1 py-4 border rounded-md border-gray-800' required/>
-                                <input type='text' className='font-normal text-center w-12 px-1 py-4 border rounded-md border-gray-800' required/>
-                                <input type='text' className='font-normal text-center w-12 px-1 py-4 border rounded-md border-gray-800' required/>
+                            <>
+      {values.map((value, index) => (
+        <input
+          key={index}
+          type="text"
+          className="font-normal text-center w-12 px-1 py-4 border rounded-md border-gray-800"
+          value={value}
+          onChange={(e) => handleChange(index, e)}
+          ref={(el) => (inputRefs.current[index] = el)}
+          required
+        />
+      ))}
+    </>
                                 
                              </div>
                           </div>
@@ -98,6 +156,12 @@ const SignupOTP = () => {
                 <Link to={onclick={}}>公式SNS</Link>
     
           </div> 
+          {/* Import OTP code */}
+          <OtpProvider>
+            
+          </OtpProvider>
+
+
         </div>
       )
 }
