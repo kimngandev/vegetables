@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 
 const SignupOTP = () => {
 
+<<<<<<< HEAD
  
   
   const handleKeyDown = (e, index) => {
@@ -15,6 +16,8 @@ const SignupOTP = () => {
     }
   }
 
+=======
+>>>>>>> bcce4f1da61a308bcf243ee4bcbd9777b8b3fc7b
   const [values, setValues] = useState(["", "", "", ""]);
   const inputRefs = useRef([]);
 
