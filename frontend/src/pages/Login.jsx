@@ -10,9 +10,9 @@ const Login = () => {
   
   
   const navigate = useNavigate();
-  const {backendUrl, setIsLoggedin, getUserData } = useContext(AppContent);
+  const {userData, backendUrl, setIsLoggedin, getUserData } = useContext(AppContent);
 
-  const [state, setState] = useState('Sign Up');
+  const [state, setState] = useState('Login');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,30 +22,46 @@ const Login = () => {
         e.preventDefault();
         axios.defaults.withCredentials = true
 
-        if(state === 'Sign Up'){
-          const {data} = await axios.post(backendUrl + '/api/auth/register', {name, email, password})
-
-          if(data.success){
-            setIsLoggedin(true)
-            getUserData()
-            navigate('/')
-          }
-          else{
-            toast.error(data.message)
-        }
-        }else{
+        
           const {data} = await axios.post(backendUrl + '/api/auth/login', {email, password})
 
           if(data.success){
             setIsLoggedin(true)
-            getUserData()
-            navigate('/user')
+            getUserData() 
+            navigate('/')
+            toast.success(
+              
+              <div>
+              
+        🎉Congratulations{" "}
+        <span
+          onClick={() => navigate(`/user/`)}
+          style={{ textDecoration: "none",textTransform:"capitalize", cursor: "pointer", color: "black" }}
+        >
+          {userData.name}
+        </span>{" "} you have successfully logged in!
+      </div>, {
+              position: "top-center",
+              autoClose: 3500,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              icon:false,
+              className: 'custom-toast',
+             
+             
+                 
+          });
+          
+            
 
           }
           else{
             toast.error(data.message)
         }
-        }
+        
      } catch (error) {
       toast.error(data.message)
         
@@ -59,19 +75,13 @@ const Login = () => {
       <div className='bg-main1 p-10 rounded-lg shadow-lg w-full sm:w-96
        text-blue-600 text-sm '>
         <h2 className='text-3xl font-semibold text-black text-center mb-3'  >
-          {state === 'Sign Up' ? 'Create Account' : 'Login to account!'}</h2>
+         Login to account!</h2>
         <p className='text-center text-sm mb-6'>
-          {state === 'Sign Up' ? 'Create your account' : 'Login to account!'}</p>
+         Login to account!</p>
 
 
         <form onSubmit={onSubmitHandler}>
-          {state === 'Sign Up' && (
-            <div className='mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-main2' >
-              <img src={assets.person_icon} />
-              <input onChange={e => setName(e.target.value)} value={name} className='bg-transparent outline-none text-white ' type='text' placeholder='Full name' required />
-
-            </div>
-          )}
+      
             
           <div className='mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-main2' >
             <img src={assets.mail_icon} />
@@ -91,7 +101,7 @@ const Login = () => {
         {state === 'Sign Up' ? (<p className='text-gray-500 text-center text-sx mt-4'>Already have an account? {' '}
           <span onClick={()=>setState('Login')} className='text-blue-400 cursor-pointer underline'>Login here</span>
         </p>) : (<p className='text-gray-400 text-center text-sx mt-4'> Don't have an account? {' '}
-          <span onClick={()=>setState('Sign Up')} className='text-blue-400 cursor-pointer underline'>Sign up</span>
+          <span onClick={() => navigate('/checkmail')} className='text-blue-400 cursor-pointer underline'>Sign up</span>
         </p>)} 
 
 

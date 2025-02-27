@@ -7,25 +7,13 @@ import { toast } from 'react-toastify'
 
 const SignupOTP = () => {
 
-  const verifyOtp = async (otp) => {
-    try {
-      const response = await fetch('http://localhost:5000/api/otp/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: otpState.email, otp })
-      });
+ 
   
-      const data = await response.json();
-  
-      if (!response.ok) throw new Error(data.message);
-  
-      toast.success("OTP verified successfully! Redirecting...");
-      setTimeout(() => navigate("/nextPage"), 2000);
-    } catch (error) {
-      toast.error(error.message);
+  const handleKeyDown = (e, index) => {
+    if(e.key === 'Backspace' && e.target.value === '' && index > 0){
+      inputRefs.current[index-1].focus();
     }
-  };
-  
+  }
 
   const [values, setValues] = useState(["", "", "", ""]);
   const inputRefs = useRef([]);
@@ -110,6 +98,8 @@ const SignupOTP = () => {
           onChange={(e) => handleChange(index, e)}
           ref={(el) => (inputRefs.current[index] = el)}
           required
+          onKeyDown={(e)=>handleKeyDown(e, index)}
+
         />
       ))}
     </>

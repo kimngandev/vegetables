@@ -4,52 +4,93 @@ import userModel from '../models/userModels.js';
 import transporter from '../config/nodemailer.js';
 import { json } from 'express';
 
-export const register = async (req, res) => {
-    const { name, email, password } = req.body;
+// export const register = async (req, res) => {
+//     const { name, email, password } = req.body;
 
-    if (!name || !email || !password) {
-        return res.json({ success: false, message: 'Missing Details' });         
+//     if (!name || !email || !password) {
+//         return res.json({ success: false, message: 'Missing Details' });         
+//     }
+//     try {
+
+//         const exitingUser = await userModel.findOne({email});
+
+//         if (exitingUser) {
+//             return res.json({ success: false, message: 'User already exists' });
+//         }
+
+//         const hashPassword = await bcrypt.hash(password, 10);
+
+//         const user = new userModel({
+//             name,
+//             email,
+//             password: hashPassword
+//         });
+//         await user.save();
+//         const token = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '7d'});
+
+//         res.cookie('token', token, {
+//             httpOnly: true,
+//             secure: process.env.NODE_ENV === 'production',
+//             sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict', 
+//             maxAge: 7 * 24 * 60 * 60 * 1000
+//         });
+
+//          //Sending welcome email to user
+//          const mailOptions = {
+//             from: process.env.SENDER_EMAIL,
+//             to: email,
+//             subject: 'Welcome to our platform',
+//             text: `Hello ${email}, welcome to our platform.`
+//         };
+//         await transporter.sendMail(mailOptions);
+
+//         return res.json({ success: true, message: 'User created successfully' });
+
+//     } catch (error) {
+//         res.json({ success: false, message: error.message });
+//     }
+// }
+
+export const register = async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+        return res.json({ success: false, message: 'Missing Email' });
     }
     try {
+        const existingUser = await userModel.findOne({ email });
 
-        const exitingUser = await userModel.findOne({email});
-
-        if (exitingUser) {
+        if (existingUser) {
             return res.json({ success: false, message: 'User already exists' });
         }
 
-        const hashPassword = await bcrypt.hash(password, 10);
+        const otp = String(Math.floor(1000 + Math.random() * 9000));
+        const otpExpireAt = Date.now() + 10 * 60 * 1000;
 
-        const user = new userModel({
-            name,
+        const tempUser = new userModel({
             email,
-            password: hashPassword
-        });
-        await user.save();
-        const token = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '7d'});
-
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict', 
-            maxAge: 7 * 24 * 60 * 60 * 1000
+            verifyOtp: otp,
+            verifyOtpExpireAt: otpExpireAt,
+            isAccountVerified: false
         });
 
-         //Sending welcome email to user
-         const mailOptions = {
+        await tempUser.save();
+
+        const mailOptions = {
             from: process.env.SENDER_EMAIL,
             to: email,
-            subject: 'Welcome to our platform',
-            text: `Hello ${email}, welcome to our platform.`
+            subject: 'Account Verification OTP',
+            text: `Your account verification OTP is ${otp}`
         };
         await transporter.sendMail(mailOptions);
 
-        return res.json({ success: true, message: 'User created successfully' });
+        return res.json({ success: true, message: 'Verification OTP sent on Email', userId: tempUser._id });
 
     } catch (error) {
         res.json({ success: false, message: error.message });
     }
-}
+};
+
 
 export const login = async (req, res) => {
     const { email, password } = req.body;
