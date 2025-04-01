@@ -5,6 +5,10 @@ import cookieParser from 'cookie-parser';
 import connectDB from './config/mongodb.js';
 import authRouter from './routes/authRoutes.js';
 import userRouter from './routes/userRoutes.js';
+<<<<<<< HEAD
+=======
+import adminRouter from './routes/adminRoutes.js';
+>>>>>>> 304f690 (fixloginsignup-admin)
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -24,12 +28,20 @@ app.use(cors({
 
 //API Endpoints
 app.get('/', (req, res) => {
+<<<<<<< HEAD
     res.send('API is running on 8000');
 });
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 
 
+=======
+    res.send('API is running on port 8000');
+});
+app.use('/api/auth', authRouter);
+app.use('/api/user', userRouter);
+app.use('/api/admin', adminRouter);
+>>>>>>> 304f690 (fixloginsignup-admin)
 
 app.get('/clear-cookie', (req, res) => {
     // Xóa cookie có tên 'myCookie'

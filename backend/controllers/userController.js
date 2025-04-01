@@ -3,7 +3,11 @@ import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import userModel from '../models/userModels.js'
 import { json } from 'express';
+<<<<<<< HEAD
 import { isAccountVerified } from './authController.js';
+=======
+import { isAuth } from './authController.js';
+>>>>>>> 304f690 (fixloginsignup-admin)
 
 // const createToken = (id) =>  {
 //     return jwt.sign({id},process.env.JWT_SECRET)

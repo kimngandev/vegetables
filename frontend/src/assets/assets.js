@@ -24,6 +24,10 @@ import menu_icon from './menu_icon.png'
 import razorpay_logo from './razorpay_logo.png'
 import stripe_logo from './stripe_logo.png'
 import cross_icon from './cross_icon.png'
+<<<<<<< HEAD
+=======
+import user_icon from './mdi_user.png'
+>>>>>>> 304f690 (fixloginsignup-admin)
 
 export const assets = {
 
@@ -47,7 +51,12 @@ export const assets = {
     cabbage,
     sweet_potato,
     bgshowproduct,
+<<<<<<< HEAD
     cart
+=======
+    cart,
+    user_icon
+>>>>>>> 304f690 (fixloginsignup-admin)
 }
 
 export const products = [

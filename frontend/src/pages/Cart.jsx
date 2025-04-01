@@ -13,6 +13,7 @@ const Cart = () => {
   
   const[cartData,setCartData] = useState([]);
 
+<<<<<<< HEAD
   useEffect(()=>{
     
     const tempData = [];
@@ -29,6 +30,20 @@ const Cart = () => {
     }
     setCartData(tempData);
   },[cartItems])
+=======
+  useEffect(() => {
+    const tempData = [];
+    for(const itemId in cartItems) {
+      if(cartItems[itemId].quantity > 0) {
+        tempData.push({
+          _id: itemId,
+          quantity: cartItems[itemId].quantity
+        });
+      }
+    }
+    setCartData(tempData);
+  }, [cartItems]);
+>>>>>>> 304f690 (fixloginsignup-admin)
 
   return (
     <div className='border-t-4 sm:px-[0vw] md:px-[0vw] lg:px-[0vw] m-auto'>
@@ -56,7 +71,21 @@ const Cart = () => {
                         </div>
 
                     </div>
+<<<<<<< HEAD
                     <input onChange={(e)=> e.target.value === '' || e.target.value === '0' ? null : updateQuantity(item._id,Number(e.target.value))} className='border max-w-10 sm:max-w-20 px-1 sm:py-2 py-1' type="number" min={1} defaultValue={item.quantity} />
+=======
+                    <input 
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === '' || value === '0') return;
+                        updateQuantity(item._id, Number(value));
+                      }} 
+                      className='border max-w-10 sm:max-w-20 px-1 sm:py-2 py-1' 
+                      type="number" 
+                      min={1} 
+                      value={item.quantity} 
+                    />
+>>>>>>> 304f690 (fixloginsignup-admin)
                     <img onClick={()=> updateQuantity(item._id,0)} className='w-4 mr-4 sm:w-5 cursor-pointer' src={assets.bin_icon} alt='' />
   
 

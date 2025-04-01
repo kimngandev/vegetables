@@ -24,16 +24,33 @@ const ShopContextProvider = (props) => {
         let cartData = structuredClone(cartItems);
         
         if (!cartData[itemId]) {
+<<<<<<< HEAD
             cartData[itemId] = {};
         }
     
         cartData[itemId][quantity] = (cartData[itemId][quantity] || 0) + quantity;
     
         setCartItems(cartData);
+=======
+            cartData[itemId] = {
+                quantity: quantity
+            };
+        } else {
+            cartData[itemId].quantity = (cartData[itemId].quantity || 0) + quantity;
+        }
+    
+        setCartItems(cartData);
+        
+        toast.success('商品をカートに追加しました', {
+            position: "top-center",
+            autoClose: 2000,
+        });
+>>>>>>> 304f690 (fixloginsignup-admin)
     };
     
     const getCartCount = () => {
         let totalCount = 0;
+<<<<<<< HEAD
         for(const items in cartItems){
             for(const item in cartItems[items]){
                 try {
@@ -41,6 +58,11 @@ const ShopContextProvider = (props) => {
                         totalCount += cartItems[items][item]
                     }
                 } catch (error) {}
+=======
+        for(const itemId in cartItems) {
+            if (cartItems[itemId].quantity > 0) {
+                totalCount += cartItems[itemId].quantity;
+>>>>>>> 304f690 (fixloginsignup-admin)
             }
         }
         return totalCount;
@@ -52,10 +74,16 @@ const ShopContextProvider = (props) => {
         if (quantity === 0) {
             delete cartData[itemId];
         } else {
+<<<<<<< HEAD
             if (!cartData[itemId]) {
                 cartData[itemId] = {};
             }
             cartData[itemId].quantity = quantity;
+=======
+            cartData[itemId] = {
+                quantity: quantity
+            };
+>>>>>>> 304f690 (fixloginsignup-admin)
         }
         
         setCartItems(cartData);
@@ -63,6 +91,7 @@ const ShopContextProvider = (props) => {
     
     const getCartAmount = () => {
         let totalAmount = 0;
+<<<<<<< HEAD
         for(const items in cartItems){
             let itemInfo = products.find((product) => product._id === items);
             for(const item in cartItems[items]){
@@ -71,6 +100,12 @@ const ShopContextProvider = (props) => {
                         totalAmount += itemInfo.price * cartItems[items][item];
                     }
                 } catch (error) {}
+=======
+        for(const itemId in cartItems) {
+            let itemInfo = products.find((product) => product._id === itemId);
+            if (itemInfo && cartItems[itemId].quantity > 0) {
+                totalAmount += itemInfo.price * cartItems[itemId].quantity;
+>>>>>>> 304f690 (fixloginsignup-admin)
             }
         }
         return totalAmount;

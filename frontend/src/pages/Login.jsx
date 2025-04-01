@@ -29,6 +29,7 @@ const Login = () => {
             setIsLoggedin(true)
             getUserData() 
             navigate('/')
+<<<<<<< HEAD
             toast.success(
               
               <div>
@@ -54,6 +55,10 @@ const Login = () => {
              
                  
           });
+=======
+         
+            
+>>>>>>> 304f690 (fixloginsignup-admin)
           
             
 
